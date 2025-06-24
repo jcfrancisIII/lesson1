@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Henry's Reading Lesson</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comic+Relief:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Comic Relief", cursive, sans-serif;
+        background: linear-gradient(135deg, #87ceeb, #98fb98);
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        text-align: center;
+        color: #ff6b6b;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .name-section {
+        margin: 40px 0;
+        padding: 20px;
+        background: #f0f8ff;
+        border-radius: 15px;
+        border: 3px solid #4169e1;
+      }
+
+      .name-title {
+        font-size: 1.8em;
+        color: #4169e1;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .letters-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .letter-card {
+        background: white;
+        border: 3px solid #ff6b6b;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        min-width: 100px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .letter-card:hover {
+        transform: scale(1.1);
+        background: #ffe4e1;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .letter {
+        font-size: 3em;
+        font-weight: bold;
+        color: #ff6b6b;
+        margin-bottom: 10px;
+      }
+
+      .sound {
+        font-size: 1.5em;
+        color: #4169e1;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      .example {
+        font-size: 1.2em;
+        color: #32cd32;
+        font-style: italic;
+      }
+
+      .play-button {
+        background: #32cd32;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 15px 30px;
+        font-size: 1.3em;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 20px auto;
+        display: block;
+        transition: all 0.3s ease;
+      }
+
+      .play-button:hover {
+        background: #228b22;
+        transform: scale(1.05);
+      }
+
+      .instruction {
+        text-align: center;
+        font-size: 1.3em;
+        color: #666;
+        margin: 20px 0;
+        padding: 15px;
+        background: #fffacd;
+        border-radius: 10px;
+        border-left: 5px solid #ffd700;
+      }
+
+      .celebration {
+        text-align: center;
+        font-size: 2em;
+        color: #ff6b6b;
+        margin: 0;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        border-radius: 15px;
+        display: none;
+        background-color: transparent;
+        z-index: 1000;
+        animation: bounce 1s ease-in-out;
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        60%,
+        100% {
+          transform: translate(-50%, -50%) translateY(0);
+        }
+        40% {
+          transform: translate(-50%, -50%) translateY(-20px);
+        }
+        80% {
+          transform: translate(-50%, -50%) translateY(-10px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🌟 Let's Learn to Read Your Name! 🌟</h1>
+
+      <div class="instruction">
+        👋 Hi Henry! Click on each letter to hear its sound and see an example
+        word!
+      </div>
+
+      <!-- HENRY -->
+      <div class="name-section">
+        <div class="name-title">✨ HENRY ✨</div>
+        <div class="letters-container">
+          <div class="letter-card" onclick="playLetterSound('h')">
+            <div class="letter">H</div>
+            <div class="sound">h</div>
+            <div class="example" onclick="playWordSound('horse')">🐴 Horse</div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('e')">
+            <div class="letter">E</div>
+            <div class="sound">e</div>
+            <div class="example" onclick="playWordSound('elephant')">
+              🐘 Elephant
+            </div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('n')">
+            <div class="letter">N</div>
+            <div class="sound">n</div>
+            <div class="example" onclick="playWordSound('nest')">🪺 Nest</div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('r')">
+            <div class="letter">R</div>
+            <div class="sound">r</div>
+            <div class="example" onclick="playWordSound('robot')">🤖 Robot</div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('y')">
+            <div class="letter">Y</div>
+            <div class="sound">y</div>
+            <div class="example" onclick="playWordSound('happy')">😊 Happy</div>
+          </div>
+        </div>
+        <button class="play-button" onclick="spellName('henry')">
+          🎵 Say "HENRY" Together!
+        </button>
+      </div>
+
+      <!-- FRANCIS -->
+      <div class="name-section">
+        <div class="name-title">✨ FRANCIS ✨</div>
+        <div class="letters-container">
+          <div class="letter-card" onclick="playLetterSound('f')">
+            <div class="letter">F</div>
+            <div class="sound">f</div>
+            <div class="example" onclick="playWordSound('fish')">🐟 Fish</div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('r')">
+            <div class="letter">R</div>
+            <div class="sound">r</div>
+            <div class="example" onclick="playWordSound('robot')">🤖 Robot</div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('a')">
+            <div class="letter">A</div>
+            <div class="sound">a</div>
+            <div class="example" onclick="playWordSound('apple')">🍎 Apple</div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('n')">
+            <div class="letter">N</div>
+            <div class="sound">/n/</div>
+            <div class="example" onclick="playWordSound('nest')">🪺 Nest</div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('c')">
+            <div class="letter">C</div>
+            <div class="sound">c</div>
+            <div class="example" onclick="playWordSound('city')">🏙️ City</div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('i')">
+            <div class="letter">I</div>
+            <div class="sound">i</div>
+            <div class="example" onclick="playWordSound('igloo')">🏠 Igloo</div>
+          </div>
+          <div class="letter-card" onclick="playLetterSound('s')">
+            <div class="letter">S</div>
+            <div class="sound">s</div>
+            <div class="example" onclick="playWordSound('snake')">🐍 Snake</div>
+          </div>
+        </div>
+        <button class="play-button" onclick="spellName('francis')">
+          🎵 Say "FRANCIS" Together!
+        </button>
+      </div>
+
+      <div class="instruction">
+        🎉 Great job, Henry! You're learning to read your name!<br />
+        Practice saying each sound and then put them together!
+      </div>
+
+      <div class="celebration" id="celebration">
+        🎊 Amazing work, Henry! You're a reading star! ⭐
+      </div>
+    </div>
+
+    <script>
+      // Track click counts for buttons and cards
+      const clickCounts = {};
+
+      function playLetterSound(letter) {
+        const card = event.currentTarget;
+        card.style.background = "#FFE4E1";
+
+        // Play pre-recorded audio for the letter
+        const audio = new Audio(`${letter}.mp3`);
+        audio.play();
+
+        // Increment click count for the card
+        const cardId = `card-${letter}`;
+        clickCounts[cardId] = (clickCounts[cardId] || 0) + 1;
+
+        // Show encouragement only after 5 clicks
+        if (clickCounts[cardId] === 5) {
+          showEncouragement(card);
+          clickCounts[cardId] = 0; // Reset count
+        }
+
+        // Reset background after sound
+        setTimeout(() => {
+          card.style.background = "white";
+        }, 500);
+      }
+
+      function playWordSound(word) {
+        // Play pre-recorded audio for the word
+        const wordAudio = new Audio(`${word}.mp3`);
+        wordAudio.play();
+      }
+
+      function spellName(name) {
+        const celebration = document.getElementById("celebration");
+        const button = event.currentTarget;
+
+        // Increment click count for the button
+        const buttonId = `button-${name}`;
+        clickCounts[buttonId] = (clickCounts[buttonId] || 0) + 1;
+
+        // Play pre-recorded audio for the full name
+        const nameAudio = new Audio(`${name}.mp3`);
+        nameAudio.play();
+
+        // Show celebration only after 5 clicks
+        if (clickCounts[buttonId] === 5) {
+          // Position the celebration next to the button
+          const rect = button.getBoundingClientRect();
+          celebration.style.top = `${rect.top + rect.height / 2}px`;
+          celebration.style.left = `${rect.left + rect.width + 10}px`;
+          celebration.style.transform = "translateY(-50%)";
+          celebration.style.display = "block";
+
+          // Set animation to none initially to ensure it starts in the correct position
+          celebration.style.animation = "none";
+
+          // Force reflow to restart the animation
+          void celebration.offsetWidth;
+
+          // Add bounce animation
+          celebration.style.animation = "bounce 1s ease-in-out";
+          celebration.innerHTML = `🎊`;
+
+          setTimeout(() => {
+            celebration.style.display = "none";
+          }, 3000);
+
+          clickCounts[buttonId] = 0; // Reset count
+        }
+      }
+
+      function showEncouragement(card) {
+        const encouragements = ["👍", "⭐", "🌟", "🎉"];
+        const random =
+          encouragements[Math.floor(Math.random() * encouragements.length)];
+
+        const celebration = document.getElementById("celebration");
+        celebration.innerHTML = random;
+
+        // Position the celebration above the clicked card
+        const rect = card.getBoundingClientRect();
+        celebration.style.top = `${rect.top - 50}px`;
+        celebration.style.left = `${rect.left + rect.width / 2}px`;
+        celebration.style.transform = "translate(-50%, -50%)";
+        celebration.style.display = "block";
+
+        // Add bounce animation
+        celebration.style.animation = "bounce 1s ease-in-out";
+
+        setTimeout(() => {
+          celebration.style.display = "none";
+        }, 2000);
+      }
+    </script>
+  </body>
+</html>
