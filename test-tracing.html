@@ -1,182 +1,256 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emoji Tracing Feature Tests</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .test-result {
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-    }
-    .pass {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-    .fail {
-      background-color: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-    h1 { color: #333; }
-    h2 { color: #666; margin-top: 30px; }
-  </style>
-</head>
-<body>
-  <h1>🧪 Emoji Tracing Feature Tests</h1>
-  <div id="results"></div>
-
-  <script>
-    const results = [];
-    
-    function test(name, fn) {
-      try {
-        fn();
-        results.push({ name, pass: true });
-      } catch (error) {
-        results.push({ name, pass: false, error: error.message });
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emoji Tracing Feature Tests</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
       }
-    }
-
-    function assert(condition, message) {
-      if (!condition) {
-        throw new Error(message);
+      .test-result {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
       }
-    }
+      .pass {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .fail {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      h1 {
+        color: #333;
+      }
+      h2 {
+        color: #666;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 Emoji Tracing Feature Tests</h1>
+    <div id="results"></div>
 
-    // Load the lesson.html content
-    fetch('lesson.html')
-      .then(response => response.text())
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
+    <script>
+      const results = [];
 
-        // Test 1: Tracing section exists
-        test('Tracing section exists', () => {
-          const section = doc.querySelector('.tracing-section');
-          assert(section !== null, 'Tracing section not found');
-        });
-
-        // Test 2: Canvas element exists
-        test('Canvas element exists with correct ID', () => {
-          const canvas = doc.querySelector('#tracingCanvas');
-          assert(canvas !== null, 'Canvas not found');
-          assert(canvas.tagName === 'CANVAS', 'Element is not a canvas');
-        });
-
-        // Test 3: Canvas dimensions
-        test('Canvas has correct dimensions (300x300)', () => {
-          const canvas = doc.querySelector('#tracingCanvas');
-          assert(canvas.width === 300, `Canvas width is ${canvas.width}, expected 300`);
-          assert(canvas.height === 300, `Canvas height is ${canvas.height}, expected 300`);
-        });
-
-        // Test 4: Monkey emoji exists
-        test('Monkey emoji background exists', () => {
-          const emoji = doc.querySelector('.emoji-background');
-          assert(emoji !== null, 'Emoji background not found');
-          assert(emoji.textContent.includes('🐵'), 'Monkey emoji not found');
-        });
-
-        // Test 5: Clear button exists
-        test('Clear button exists with onclick handler', () => {
-          const button = doc.querySelector('.clear-button');
-          assert(button !== null, 'Clear button not found');
-          assert(button.getAttribute('onclick') === 'clearCanvas()', 'Clear button onclick not set correctly');
-        });
-
-        // Test 6: CSS styles exist
-        test('CSS styles for tracing section exist', () => {
-          const styles = html;
-          assert(styles.includes('.tracing-section'), 'Tracing section CSS not found');
-          assert(styles.includes('.canvas-container'), 'Canvas container CSS not found');
-          assert(styles.includes('.emoji-background'), 'Emoji background CSS not found');
-          assert(styles.includes('.clear-button'), 'Clear button CSS not found');
-        });
-
-        // Test 7: Canvas has touch-action none
-        test('Canvas CSS has touch-action: none', () => {
-          const styles = html;
-          assert(styles.includes('touch-action: none'), 'Canvas touch-action: none not found');
-        });
-
-        // Test 8: Drawing functions exist
-        test('Drawing JavaScript functions exist', () => {
-          assert(html.includes('function startDrawing'), 'startDrawing function not found');
-          assert(html.includes('function draw'), 'draw function not found');
-          assert(html.includes('function stopDrawing'), 'stopDrawing function not found');
-          assert(html.includes('function clearCanvas'), 'clearCanvas function not found');
-        });
-
-        // Test 9: Mouse event listeners
-        test('Mouse event listeners are attached', () => {
-          assert(html.includes('addEventListener("mousedown"'), 'mousedown listener not found');
-          assert(html.includes('addEventListener("mousemove"'), 'mousemove listener not found');
-          assert(html.includes('addEventListener("mouseup"'), 'mouseup listener not found');
-          assert(html.includes('addEventListener("mouseout"'), 'mouseout listener not found');
-        });
-
-        // Test 10: Touch event listeners
-        test('Touch event listeners are attached', () => {
-          assert(html.includes('addEventListener("touchstart"'), 'touchstart listener not found');
-          assert(html.includes('addEventListener("touchmove"'), 'touchmove listener not found');
-          assert(html.includes('addEventListener("touchend"'), 'touchend listener not found');
-          assert(html.includes('addEventListener("touchcancel"'), 'touchcancel listener not found');
-        });
-
-        // Test 11: Prevent default on touch
-        test('Touch events have preventDefault to stop scrolling', () => {
-          assert(html.includes('e.preventDefault()'), 'preventDefault not found in draw function');
-          assert(html.includes('passive: false'), 'Touch listeners need passive: false');
-        });
-
-        // Test 12: Blue stroke color
-        test('Drawing uses blue stroke color', () => {
-          assert(html.includes('strokeStyle = "#4169e1"'), 'Blue stroke color not set correctly');
-        });
-
-        // Test 13: Title exists
-        test('Title includes "Trace the Emoji"', () => {
-          const title = doc.querySelector('.tracing-title');
-          assert(title !== null, 'Tracing title not found');
-          assert(title.textContent.includes('Trace the Emoji'), 'Title text incorrect');
-        });
-
-        // Display results
-        displayResults();
-      })
-      .catch(error => {
-        document.getElementById('results').innerHTML = 
-          `<div class="test-result fail">Error loading lesson.html: ${error.message}</div>`;
-      });
-
-    function displayResults() {
-      const resultsDiv = document.getElementById('results');
-      const passCount = results.filter(r => r.pass).length;
-      const failCount = results.filter(r => !r.pass).length;
-
-      let html = `<h2>Test Summary: ${passCount} passed, ${failCount} failed</h2>`;
-      
-      results.forEach(result => {
-        if (result.pass) {
-          html += `<div class="test-result pass">✅ ${result.name}</div>`;
-        } else {
-          html += `<div class="test-result fail">❌ ${result.name}<br><small>${result.error}</small></div>`;
+      function test(name, fn) {
+        try {
+          fn();
+          results.push({ name, pass: true });
+        } catch (error) {
+          results.push({ name, pass: false, error: error.message });
         }
-      });
+      }
 
-      resultsDiv.innerHTML = html;
+      function assert(condition, message) {
+        if (!condition) {
+          throw new Error(message);
+        }
+      }
 
-      // Manual tests reminder
-      html += `
+      // Load the lesson.html content
+      fetch("index.html")
+        .then((response) => response.text())
+        .then((html) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+
+          // Test 1: Tracing section exists
+          test("Tracing section exists", () => {
+            const section = doc.querySelector(".tracing-section");
+            assert(section !== null, "Tracing section not found");
+          });
+
+          // Test 2: Canvas element exists
+          test("Canvas element exists with correct ID", () => {
+            const canvas = doc.querySelector("#tracingCanvas");
+            assert(canvas !== null, "Canvas not found");
+            assert(canvas.tagName === "CANVAS", "Element is not a canvas");
+          });
+
+          // Test 3: Canvas dimensions
+          test("Canvas has correct dimensions (300x300)", () => {
+            const canvas = doc.querySelector("#tracingCanvas");
+            assert(
+              canvas.width === 300,
+              `Canvas width is ${canvas.width}, expected 300`,
+            );
+            assert(
+              canvas.height === 300,
+              `Canvas height is ${canvas.height}, expected 300`,
+            );
+          });
+
+          // Test 4: Monkey emoji exists
+          test("Monkey emoji background exists", () => {
+            const emoji = doc.querySelector(".emoji-background");
+            assert(emoji !== null, "Emoji background not found");
+            assert(emoji.textContent.includes("🐵"), "Monkey emoji not found");
+          });
+
+          // Test 5: Clear button exists
+          test("Clear button exists with onclick handler", () => {
+            const button = doc.querySelector(".clear-button");
+            assert(button !== null, "Clear button not found");
+            assert(
+              button.getAttribute("onclick") === "clearCanvas()",
+              "Clear button onclick not set correctly",
+            );
+          });
+
+          // Test 6: CSS styles exist
+          test("CSS styles for tracing section exist", () => {
+            const styles = html;
+            assert(
+              styles.includes(".tracing-section"),
+              "Tracing section CSS not found",
+            );
+            assert(
+              styles.includes(".canvas-container"),
+              "Canvas container CSS not found",
+            );
+            assert(
+              styles.includes(".emoji-background"),
+              "Emoji background CSS not found",
+            );
+            assert(
+              styles.includes(".clear-button"),
+              "Clear button CSS not found",
+            );
+          });
+
+          // Test 7: Canvas has touch-action none
+          test("Canvas CSS has touch-action: none", () => {
+            const styles = html;
+            assert(
+              styles.includes("touch-action: none"),
+              "Canvas touch-action: none not found",
+            );
+          });
+
+          // Test 8: Drawing functions exist
+          test("Drawing JavaScript functions exist", () => {
+            assert(
+              html.includes("function startDrawing"),
+              "startDrawing function not found",
+            );
+            assert(html.includes("function draw"), "draw function not found");
+            assert(
+              html.includes("function stopDrawing"),
+              "stopDrawing function not found",
+            );
+            assert(
+              html.includes("function clearCanvas"),
+              "clearCanvas function not found",
+            );
+          });
+
+          // Test 9: Mouse event listeners
+          test("Mouse event listeners are attached", () => {
+            assert(
+              html.includes('addEventListener("mousedown"'),
+              "mousedown listener not found",
+            );
+            assert(
+              html.includes('addEventListener("mousemove"'),
+              "mousemove listener not found",
+            );
+            assert(
+              html.includes('addEventListener("mouseup"'),
+              "mouseup listener not found",
+            );
+            assert(
+              html.includes('addEventListener("mouseout"'),
+              "mouseout listener not found",
+            );
+          });
+
+          // Test 10: Touch event listeners
+          test("Touch event listeners are attached", () => {
+            assert(
+              html.includes('addEventListener("touchstart"'),
+              "touchstart listener not found",
+            );
+            assert(
+              html.includes('addEventListener("touchmove"'),
+              "touchmove listener not found",
+            );
+            assert(
+              html.includes('addEventListener("touchend"'),
+              "touchend listener not found",
+            );
+            assert(
+              html.includes('addEventListener("touchcancel"'),
+              "touchcancel listener not found",
+            );
+          });
+
+          // Test 11: Prevent default on touch
+          test("Touch events have preventDefault to stop scrolling", () => {
+            assert(
+              html.includes("e.preventDefault()"),
+              "preventDefault not found in draw function",
+            );
+            assert(
+              html.includes("passive: false"),
+              "Touch listeners need passive: false",
+            );
+          });
+
+          // Test 12: Blue stroke color
+          test("Drawing uses blue stroke color", () => {
+            assert(
+              html.includes('strokeStyle = "#4169e1"'),
+              "Blue stroke color not set correctly",
+            );
+          });
+
+          // Test 13: Title exists
+          test('Title includes "Trace the Emoji"', () => {
+            const title = doc.querySelector(".tracing-title");
+            assert(title !== null, "Tracing title not found");
+            assert(
+              title.textContent.includes("Trace the Emoji"),
+              "Title text incorrect",
+            );
+          });
+
+          // Display results
+          displayResults();
+        })
+        .catch((error) => {
+          document.getElementById("results").innerHTML =
+            `<div class="test-result fail">Error loading lesson.html: ${error.message}</div>`;
+        });
+
+      function displayResults() {
+        const resultsDiv = document.getElementById("results");
+        const passCount = results.filter((r) => r.pass).length;
+        const failCount = results.filter((r) => !r.pass).length;
+
+        let html = `<h2>Test Summary: ${passCount} passed, ${failCount} failed</h2>`;
+
+        results.forEach((result) => {
+          if (result.pass) {
+            html += `<div class="test-result pass">✅ ${result.name}</div>`;
+          } else {
+            html += `<div class="test-result fail">❌ ${result.name}<br><small>${result.error}</small></div>`;
+          }
+        });
+
+        resultsDiv.innerHTML = html;
+
+        // Manual tests reminder
+        html += `
         <h2>Manual Tests Required</h2>
         <div class="test-result" style="background: #fff3cd; border: 1px solid #ffc107; color: #856404;">
           <strong>Please test manually:</strong>
@@ -190,8 +264,8 @@
         </div>
       `;
 
-      resultsDiv.innerHTML = html;
-    }
-  </script>
-</body>
+        resultsDiv.innerHTML = html;
+      }
+    </script>
+  </body>
 </html>
