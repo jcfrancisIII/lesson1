@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Set max iterations to avoid infinite loops
+MAX_ITERATIONS=5
+
+for i in $(seq 1 $MAX_ITERATIONS); do
+  echo "=== Iteration $i ==="
+  
+  # Read prompt from PROMPT.md
+  prompt=$(cat PROMPT.md)
+  
+  # Run GitHub Copilot CLI with the prompt
+  # Using the new standalone GitHub Copilot CLI
+  # Install: npm install -g @github/copilot
+  copilot -i "$prompt"
+  
+  # Optional: Check for completion signal
+  if [ -f progress.txt ] && grep -q "COMPLETE" progress.txt; then
+    echo "Task completed!"
+    break
+  fi
+  
+  sleep 2  # Brief pause between iterations
+done

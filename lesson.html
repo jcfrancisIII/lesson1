@@ -160,6 +160,71 @@
           transform: translate(-50%, -50%) translateY(-10px);
         }
       }
+
+      .tracing-section {
+        margin: 40px 0;
+        padding: 20px;
+        background: #fff5e6;
+        border-radius: 15px;
+        border: 3px solid #ff8c00;
+      }
+
+      .tracing-title {
+        font-size: 1.8em;
+        color: #ff8c00;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .canvas-container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        margin: 20px auto;
+        border: 3px solid #ff6b6b;
+        border-radius: 15px;
+        background: white;
+        overflow: hidden;
+      }
+
+      .emoji-background {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 200px;
+        z-index: 1;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      #tracingCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        cursor: crosshair;
+        touch-action: none;
+      }
+
+      .clear-button {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 15px 30px;
+        font-size: 1.3em;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 20px auto;
+        display: block;
+        transition: all 0.3s ease;
+      }
+
+      .clear-button:hover {
+        background: #ff4444;
+        transform: scale(1.05);
+      }
     </style>
   </head>
   <body>
@@ -256,6 +321,18 @@
       <div class="instruction">
         🎉 Great job, Henry! You're learning to read your name!<br />
         Practice saying each sound and then put them together!
+      </div>
+
+      <!-- EMOJI TRACING -->
+      <div class="tracing-section">
+        <div class="tracing-title">✏️ Trace the Emoji! ✏️</div>
+        <div class="canvas-container">
+          <div class="emoji-background">🐵</div>
+          <canvas id="tracingCanvas" width="300" height="300"></canvas>
+        </div>
+        <button class="clear-button" onclick="clearCanvas()">
+          🗑️ Clear & Try Again!
+        </button>
       </div>
 
       <div class="celebration" id="celebration">
@@ -358,6 +435,74 @@
           celebration.style.display = "none";
         }, 2000);
       }
+
+      // Emoji Tracing Canvas Functionality
+      const canvas = document.getElementById("tracingCanvas");
+      const ctx = canvas.getContext("2d");
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+
+      // Configure drawing style
+      ctx.strokeStyle = "#4169e1"; // Blue color
+      ctx.lineWidth = 8;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      function startDrawing(e) {
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        
+        // Handle both mouse and touch events
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        lastX = clientX - rect.left;
+        lastY = clientY - rect.top;
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        
+        e.preventDefault(); // Prevent scrolling on touch devices
+        
+        const rect = canvas.getBoundingClientRect();
+        
+        // Handle both mouse and touch events
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        const currentX = clientX - rect.left;
+        const currentY = clientY - rect.top;
+
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(currentX, currentY);
+        ctx.stroke();
+
+        lastX = currentX;
+        lastY = currentY;
+      }
+
+      function stopDrawing() {
+        isDrawing = false;
+      }
+
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // Mouse events
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mouseout", stopDrawing);
+
+      // Touch events
+      canvas.addEventListener("touchstart", startDrawing, { passive: false });
+      canvas.addEventListener("touchmove", draw, { passive: false });
+      canvas.addEventListener("touchend", stopDrawing);
+      canvas.addEventListener("touchcancel", stopDrawing);
     </script>
   </body>
 </html>
